@@ -31,56 +31,46 @@ import {
 	ECSValidator
 } from "@elijahjcobb/server";
 import * as Express from "express";
-import {Business, Session, SessionValidator} from "../../objects/Objects";
+import {Business, Device, Session, SessionValidator} from "../../objects/Objects";
 import {StandardType} from "typit";
+import {DeviceIdEndpoint} from "./DeviceIdEndpoint";
+import {DeviceAuthEndpoint} from "./DeviceAuthEndpoint";
 
-export class BusinessMeEndpoint extends ECSRouter {
+export class DeviceEndpoint extends ECSRouter {
 
 	public getRouter(): Express.Router {
 
 		this.add(new ECSRoute(
-			ECSRequestType.GET,
+			ECSRequestType.POST,
 			"/",
-			BusinessMeEndpoint.get,
-			new ECSValidator(
-				undefined,
-				SessionValidator.init().business()
-			)
-		));
-
-		this.add(new ECSRoute(
-			ECSRequestType.PUT,
-			"/name",
-			BusinessMeEndpoint.updateName,
+			DeviceEndpoint.create,
 			new ECSValidator(
 				new ECSTypeValidator({
-					name: StandardType.STRING
+					name: StandardType.STRING,
+					url: StandardType.STRING
 				}),
 				SessionValidator.init().business()
 			)
 		));
 
+		this.use("/auth", new DeviceAuthEndpoint());
+		this.use("/:id", new DeviceIdEndpoint());
+
 		return this.createRouter();
 	}
 
-	private static async get(req: ECSRequest): Promise<ECSResponse> {
+	private static async create(req: ECSRequest): Promise<ECSResponse> {
 
 		const session: Session = req.getSession();
 		const business: Business = await session.getBusiness();
 
-		return new ECSResponse(business.getJSON());
+		const device: Device = new Device();
+		device.props.businessId = business.id;
+		device.props.name = req.get("name");
+		device.props.url = req.get("url");
+		await device.create();
 
-	}
-
-	private static async updateName(req: ECSRequest): Promise<ECSResponse> {
-
-		const session: Session = req.getSession();
-		const business: Business = await session.getBusiness();
-
-		business.props.name = req.get("name");
-		await business.updateProps("name");
-
-		return new ECSResponse(business.getJSON());
+		return new ECSResponse(device.getJSON());
 
 	}
 

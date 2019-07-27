@@ -33,7 +33,6 @@ import {
 } from "@elijahjcobb/server";
 import * as Express from "express";
 import {Session, User, SessionValidator} from "../../objects/Objects";
-import {ECMQuery} from "@elijahjcobb/maria";
 import {StandardType} from "typit";
 
 export class UserMeEndpoint extends ECSRouter {

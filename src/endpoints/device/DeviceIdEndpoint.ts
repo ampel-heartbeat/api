@@ -22,6 +22,7 @@
  *
  */
 import {
+	ECSError,
 	ECSRequest,
 	ECSRequestType,
 	ECSResponse,
@@ -31,17 +32,18 @@ import {
 	ECSValidator
 } from "@elijahjcobb/server";
 import * as Express from "express";
-import {Business, Session, SessionValidator} from "../../objects/Objects";
+import {Business, Device, Session, SessionValidator} from "../../objects/Objects";
 import {StandardType} from "typit";
+import {ECMQuery} from "@elijahjcobb/maria";
 
-export class BusinessMeEndpoint extends ECSRouter {
+export class DeviceIdEndpoint extends ECSRouter {
 
 	public getRouter(): Express.Router {
 
 		this.add(new ECSRoute(
 			ECSRequestType.GET,
 			"/",
-			BusinessMeEndpoint.get,
+			DeviceIdEndpoint.get,
 			new ECSValidator(
 				undefined,
 				SessionValidator.init().business()
@@ -50,8 +52,20 @@ export class BusinessMeEndpoint extends ECSRouter {
 
 		this.add(new ECSRoute(
 			ECSRequestType.PUT,
+			"/url",
+			DeviceIdEndpoint.updateUrl,
+			new ECSValidator(
+				new ECSTypeValidator({
+					url: StandardType.STRING
+				}),
+				SessionValidator.init().business()
+			)
+		));
+
+		this.add(new ECSRoute(
+			ECSRequestType.PUT,
 			"/name",
-			BusinessMeEndpoint.updateName,
+			DeviceIdEndpoint.updateName,
 			new ECSValidator(
 				new ECSTypeValidator({
 					name: StandardType.STRING
@@ -68,7 +82,12 @@ export class BusinessMeEndpoint extends ECSRouter {
 		const session: Session = req.getSession();
 		const business: Business = await session.getBusiness();
 
-		return new ECSResponse(business.getJSON());
+		const deviceId: string = req.getParameters().get("deviceId") as string;
+		const device: Device | undefined = await ECMQuery.getObjectWithId(Device, deviceId, true);
+		if (!device) throw ECSError.init().show().code(404).msg("A device does not exist for this id.");
+		if (device.props.businessId !== business.id) throw ECSError.init().show().code(401).msg("You do not manage this device.");
+
+		return new ECSResponse(device.getJSON());
 
 	}
 
@@ -77,10 +96,32 @@ export class BusinessMeEndpoint extends ECSRouter {
 		const session: Session = req.getSession();
 		const business: Business = await session.getBusiness();
 
-		business.props.name = req.get("name");
-		await business.updateProps("name");
+		const deviceId: string = req.getParameters().get("deviceId") as string;
+		const device: Device | undefined = await ECMQuery.getObjectWithId(Device, deviceId, true);
+		if (!device) throw ECSError.init().show().code(404).msg("A device does not exist for this id.");
+		if (device.props.businessId !== business.id) throw ECSError.init().show().code(401).msg("You do not manage this device.");
 
-		return new ECSResponse(business.getJSON());
+		device.props.name = req.get("name");
+		await device.updateProps("name");
+
+		return new ECSResponse(device.getJSON());
+
+	}
+
+	private static async updateUrl(req: ECSRequest): Promise<ECSResponse> {
+
+		const session: Session = req.getSession();
+		const business: Business = await session.getBusiness();
+
+		const deviceId: string = req.getParameters().get("deviceId") as string;
+		const device: Device | undefined = await ECMQuery.getObjectWithId(Device, deviceId, true);
+		if (!device) throw ECSError.init().show().code(404).msg("A device does not exist for this id.");
+		if (device.props.businessId !== business.id) throw ECSError.init().show().code(401).msg("You do not manage this device.");
+
+		device.props.url = req.get("url");
+		await device.updateProps("url");
+
+		return new ECSResponse(device.getJSON());
 
 	}
 

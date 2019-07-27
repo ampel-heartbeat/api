@@ -27,7 +27,7 @@ import * as Express from "express";
 import {UserMeEndpoint} from "./UserMeEndpoint";
 import {UserAuthEndpoint} from "./UserAuthEndpoint";
 
-class UserEndpoint extends ECSRouter {
+export class UserEndpoint extends ECSRouter {
 
 	public getRouter(): Express.Router {
 

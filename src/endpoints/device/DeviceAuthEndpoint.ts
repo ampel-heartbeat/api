@@ -31,17 +31,17 @@ import {
 	ECSValidator
 } from "@elijahjcobb/server";
 import * as Express from "express";
-import {Business, Session, SessionValidator} from "../../objects/Objects";
+import {SessionValidator} from "../../objects/Objects";
 import {StandardType} from "typit";
 
-export class BusinessMeEndpoint extends ECSRouter {
+export class DeviceAuthEndpoint extends ECSRouter {
 
 	public getRouter(): Express.Router {
 
 		this.add(new ECSRoute(
-			ECSRequestType.GET,
-			"/",
-			BusinessMeEndpoint.get,
+			ECSRequestType.POST,
+			"/get-code",
+			DeviceAuthEndpoint.getCode,
 			new ECSValidator(
 				undefined,
 				SessionValidator.init().business()
@@ -49,12 +49,13 @@ export class BusinessMeEndpoint extends ECSRouter {
 		));
 
 		this.add(new ECSRoute(
-			ECSRequestType.PUT,
-			"/name",
-			BusinessMeEndpoint.updateName,
+			ECSRequestType.POST,
+			"/finalize",
+			DeviceAuthEndpoint.finalize,
 			new ECSValidator(
 				new ECSTypeValidator({
-					name: StandardType.STRING
+					code: StandardType.STRING,
+					deviceId: StandardType.STRING
 				}),
 				SessionValidator.init().business()
 			)
@@ -63,24 +64,15 @@ export class BusinessMeEndpoint extends ECSRouter {
 		return this.createRouter();
 	}
 
-	private static async get(req: ECSRequest): Promise<ECSResponse> {
+	private static async getCode(req: ECSRequest): Promise<ECSResponse> {
 
-		const session: Session = req.getSession();
-		const business: Business = await session.getBusiness();
-
-		return new ECSResponse(business.getJSON());
+		return new ECSResponse({});
 
 	}
 
-	private static async updateName(req: ECSRequest): Promise<ECSResponse> {
+	private static async finalize(req: ECSRequest): Promise<ECSResponse> {
 
-		const session: Session = req.getSession();
-		const business: Business = await session.getBusiness();
-
-		business.props.name = req.get("name");
-		await business.updateProps("name");
-
-		return new ECSResponse(business.getJSON());
+		return new ECSResponse({});
 
 	}
 
