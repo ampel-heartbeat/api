@@ -34,7 +34,7 @@ import {
 } from "@elijahjcobb/server";
 import { StandardType } from "typit";
 import * as Express from "express";
-import {User, Session, UserProps} from "../objects/Objects";
+import {User, Session, UserProps} from "../../objects/Objects";
 import { ECMQuery } from "@elijahjcobb/maria";
 import { ECSQLCMD } from "@elijahjcobb/sql-cmd";
 

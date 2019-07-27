@@ -50,6 +50,7 @@ import {ECMObject, ECMObjectPropType, ECMQuery} from "@elijahjcobb/maria";
 import {ITokenable, Tokenable} from "./Tokenable";
 import {ECSError} from "@elijahjcobb/server";
 import {User} from "./User";
+import {Business} from "./Business";
 
 export interface SessionProps extends ECMObjectPropType {
 	userId: string;
@@ -90,6 +91,17 @@ export class Session extends ECMObject<SessionProps> implements Tokenable {
 		if (!user) throw ECSError.init().show().code(400).msg("A user does not exist for your session's userId.");
 
 		return user;
+
+	}
+
+	public async getBusiness(): Promise<Business> {
+
+		const businessId: string | undefined = this.props.businessId;
+		if (!businessId) throw ECSError.init().show().code(400).msg("Your session does not have a businessId.");
+		const business: Business | undefined = await ECMQuery.getObjectWithId(Business, businessId, true);
+		if (!business) throw ECSError.init().show().code(400).msg("A business does not exist for your session's businessId.");
+
+		return business;
 
 	}
 
