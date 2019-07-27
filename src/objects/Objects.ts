@@ -29,3 +29,4 @@ export { IHeartbeat } from "./Heartbeat";
 export { ForegroundHeartbeat, ForegroundHeartbeatProps } from "./ForegroundHeartbeat";
 export { BackgroundHeartbeat, BackgroundHeartbeatProps, IBackgroundHeartBeat } from "./BackgroundHeartbeat";
 export { Session, SessionProps } from "./Session";
+export { SessionValidator, SessionLevel } from "./SessionValidator";

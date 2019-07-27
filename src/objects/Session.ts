@@ -46,9 +46,10 @@
  *
  */
 
-import {ECMObject, ECMObjectPropType} from "@elijahjcobb/maria";
+import {ECMObject, ECMObjectPropType, ECMQuery} from "@elijahjcobb/maria";
 import {ITokenable, Tokenable} from "./Tokenable";
 import {ECSError} from "@elijahjcobb/server";
+import {User} from "./User";
 
 export interface SessionProps extends ECMObjectPropType {
 	userId: string;
@@ -78,6 +79,17 @@ export class Session extends ECMObject<SessionProps> implements Tokenable {
 			type: "session",
 			token: this.id
 		};
+
+	}
+
+	public async getUser(): Promise<User> {
+
+		const userId: string | undefined = this.props.userId;
+		if (!userId) throw ECSError.init().show().code(400).msg("Your session does not have a userId.");
+		const user: User | undefined = await ECMQuery.getObjectWithId(User, userId, true);
+		if (!user) throw ECSError.init().show().code(400).msg("A user does not exist for your session's userId.");
+
+		return user;
 
 	}
 
