@@ -21,3 +21,31 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
+
+import {
+	ECSError,
+	ECSRequest,
+	ECSRequestType,
+	ECSResponse,
+	ECSRoute,
+	ECSRouter,
+	ECSTypeValidator,
+	ECSValidator
+} from "@elijahjcobb/server";
+import { StandardType } from "typit";
+import * as Express from "express";
+import {User, Session, UserProps} from "../objects/Objects";
+import { ECMQuery } from "@elijahjcobb/maria";
+import { ECSQLCMD } from "@elijahjcobb/sql-cmd";
+
+
+export class UserMeEndpoint extends ECSRouter {
+
+	public getRouter(): Express.Router {
+
+
+		return this.createRouter();
+
+	}
+
+}

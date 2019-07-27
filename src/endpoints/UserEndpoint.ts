@@ -21,3 +21,21 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
+
+import { ECSRouter } from "@elijahjcobb/server";
+import * as Express from "express";
+import {UserMeEndpoint} from "./UserMeEndpoint";
+import {UserAuthEndpoint} from "./UserAuthEndpoint";
+
+class UserEndpoint extends ECSRouter {
+
+	public getRouter(): Express.Router {
+
+		this.use("/me", new UserMeEndpoint());
+		this.use("/auth", new UserAuthEndpoint());
+
+		return this.createRouter();
+
+	}
+
+}
