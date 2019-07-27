@@ -23,17 +23,20 @@
  */
 
 import { ECMObject, ECMObjectPropType } from "@elijahjcobb/maria";
+import { ECGenerator } from "@elijahjcobb/encryption";
+import {Session} from "./Session";
+import {ECSError} from "@elijahjcobb/server";
 
-interface UserProps extends ECMObjectPropType {
+export interface UserProps extends ECMObjectPropType {
 	firstName: string;
 	lastName: string;
 	email: string;
-	salt: string;
-	pepper: string;
+	salt: Buffer;
+	pepper: Buffer;
 	businessId: string;
 }
 
-class User extends ECMObject<UserProps> {
+export class User extends ECMObject<UserProps> {
 
 	public constructor() {
 
@@ -48,4 +51,42 @@ class User extends ECMObject<UserProps> {
 
 	}
 
-}
+	public async generateSession(): Promise<Session> {
+
+		if (!this.id) throw ECSError.init().code(500).msg("Tried to generate session for a user who hasn't been created.");
+
+		const session: Session = new Session();
+
+		session.props.userId = this.id;
+		session.props.businessId = this.props.businessId;
+		session.props.alive = true;
+
+		await session.create();
+
+		return session;
+
+	}
+
+	public static generateSalt(): Buffer {
+
+		return ECGenerator.randomBytes(32);
+
+	}
+
+	public static generatePepper(salt: Buffer, password: string): Buffer {
+
+		const passwordData: Buffer = Buffer.from(password, "utf8");
+		let pepper: Buffer = Buffer.concat([salt, passwordData]);
+		for (let i: number = 0; i < 10000; i++) pepper = Buffer.concat([pepper, passwordData]);
+
+		return pepper;
+
+	}
+
+	public static peppersAreEqual(p1: Buffer, p2: Buffer): boolean {
+
+		return p1.equals(p2);
+
+	}
+
+ }

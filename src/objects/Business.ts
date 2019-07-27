@@ -24,11 +24,11 @@
 
 import { ECMObject, ECMObjectPropType } from "@elijahjcobb/maria";
 
-interface BusinessProps extends ECMObjectPropType {
+export interface BusinessProps extends ECMObjectPropType {
 	name: string;
 }
 
-class Business extends ECMObject<BusinessProps> {
+export class Business extends ECMObject<BusinessProps> {
 
 	public constructor() {
 

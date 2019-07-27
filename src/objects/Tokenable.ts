@@ -22,28 +22,11 @@
  *
  */
 
-import { ECMObject, ECMObjectPropType } from "@elijahjcobb/maria";
-
-export interface DeviceProps extends ECMObjectPropType {
-	name: string;
-	businessId: string;
-	url: string;
-	alive: string;
-	dataplicityId: string;
+export interface ITokenable {
+	type: "session";
+	token: string;
 }
 
-export class Device extends ECMObject<DeviceProps> {
-
-	public constructor() {
-
-		super("Device", {
-			name: "string",
-			businessId: "string",
-			url: "string",
-			alive: "string",
-			dataplicityId: "string"
-		});
-
-	}
-
+export interface Tokenable {
+	generateToken(): ITokenable;
 }

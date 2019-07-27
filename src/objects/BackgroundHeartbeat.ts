@@ -25,7 +25,7 @@
 import { ECMObject, ECMObjectPropType } from "@elijahjcobb/maria";
 import { IHeartbeat } from "./Heartbeat";
 
-interface IBackgroundHeartBeat {
+export interface IBackgroundHeartBeat {
 	cpuUsage: number;
 	cpuTempLow: number;
 	cpuTempHigh: number;
@@ -37,11 +37,11 @@ interface IBackgroundHeartBeat {
 	uptime: number;
 }
 
-interface BackgroundHeartbeatProps extends IHeartbeat, IBackgroundHeartBeat, ECMObjectPropType {
+export interface BackgroundHeartbeatProps extends IHeartbeat, IBackgroundHeartBeat, ECMObjectPropType {
 	deviceId: string;
 }
 
-class BackgroundHeartbeat extends ECMObject<BackgroundHeartbeatProps> {
+export class BackgroundHeartbeat extends ECMObject<BackgroundHeartbeatProps> {
 
 	public constructor() {
 

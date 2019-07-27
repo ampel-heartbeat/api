@@ -25,11 +25,11 @@
 import { ECMObject, ECMObjectPropType } from "@elijahjcobb/maria";
 import { IHeartbeat } from "./Heartbeat";
 
-interface ForegroundHeartbeatProps extends IHeartbeat, ECMObjectPropType {
+export interface ForegroundHeartbeatProps extends IHeartbeat, ECMObjectPropType {
 	url: string;
 }
 
-class ForegroundHeartbeat extends ECMObject<ForegroundHeartbeatProps> {
+export class ForegroundHeartbeat extends ECMObject<ForegroundHeartbeatProps> {
 
 	public constructor() {
 

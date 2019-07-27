@@ -21,29 +21,3 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  */
-
-import { ECMObject, ECMObjectPropType } from "@elijahjcobb/maria";
-
-export interface DeviceProps extends ECMObjectPropType {
-	name: string;
-	businessId: string;
-	url: string;
-	alive: string;
-	dataplicityId: string;
-}
-
-export class Device extends ECMObject<DeviceProps> {
-
-	public constructor() {
-
-		super("Device", {
-			name: "string",
-			businessId: "string",
-			url: "string",
-			alive: "string",
-			dataplicityId: "string"
-		});
-
-	}
-
-}
