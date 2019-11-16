@@ -22,36 +22,9 @@
  *
  */
 
-import {ECSError, ECSRequest, ECSServer} from "@elijahjcobb/server";
 import {ECMDatabase, ECMQuery} from "@elijahjcobb/maria";
-import {UserEndpoint} from "./endpoints/user/UserEndpoint";
-import {BusinessEndpoint} from "./endpoints/business/BusinessEndpoint";
-import {DeviceEndpoint} from "./endpoints/device/DeviceEndpoint";
-import {Session} from "./objects/Objects";
 
 ECMDatabase.init({
 	database: "heartbeat"
 });
 
-const server: ECSServer = new ECSServer();
-
-server.use("/user", new UserEndpoint());
-server.use("/business", new BusinessEndpoint());
-server.use("/device", new DeviceEndpoint());
-
-server.setAuthorizationMiddleware(async (req: ECSRequest): Promise<ECSRequest> => {
-
-	const bearerToken: string | undefined = req.getHeader("Authorization");
-	if (!bearerToken) throw ECSError.init().show().code(401).msg("Authorization header has no value.");
-	const token: string | undefined = bearerToken.split(" ")[1];
-	if (!token) throw ECSError.init().show().code(401).msg("Authorization header has no bearer token.");
-	const session: Session | undefined = await ECMQuery.getObjectWithId(Session, token, true);
-	if (!session) throw ECSError.init().show().code(401).msg("Invalid session token.");
-
-	req.setSession(session);
-
-	return req;
-
-});
-
-server.startHTTP(80);

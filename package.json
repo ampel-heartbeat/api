@@ -33,9 +33,9 @@
 		"@elijahjcobb/sql-cmd": "latest"
 	},
 	"devDependencies": {
-		"@types/node": "latest",
-		"typescript": "latest",
-		"tslint": "latest"
+		"@types/node": "^12.12.8",
+		"tslint": "^5.20.1",
+		"typescript": "^3.7.2"
 	},
 	"files": [
 		"dist"

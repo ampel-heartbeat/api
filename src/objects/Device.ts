@@ -26,10 +26,18 @@ import { ECMObject, ECMObjectPropType } from "@elijahjcobb/maria";
 
 export interface DeviceProps extends ECMObjectPropType {
 	name: string;
-	businessId: string;
-	url: string;
-	alive: string;
-	dataplicityId: string;
+	userId: string;
+	enforcedUrl: string;
+	uptime: number;
+	battery: number;
+	locationLat: number;
+	locationLng: number;
+	time: number;
+	cpu: number;
+	hdd: number;
+	ram: number;
+	temp: number;
+	timezone: string;
 }
 
 export class Device extends ECMObject<DeviceProps> {
@@ -38,10 +46,18 @@ export class Device extends ECMObject<DeviceProps> {
 
 		super("Device", {
 			name: "string",
-			businessId: "string",
-			url: "string",
-			alive: "string",
-			dataplicityId: "string"
+			userId: "string",
+			enforcedUrl: "string",
+			uptime: "number",
+			battery: "number",
+			locationLat: "number",
+			locationLng: "number",
+			time: "number",
+			cpu: "number",
+			hdd: "number",
+			ram: "number",
+			temp: "number",
+			timezone: "string"
 		});
 
 	}
