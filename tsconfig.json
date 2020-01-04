@@ -5,7 +5,8 @@
 		"sourceMap": false,
 		"noEmitOnError": true,
 		"moduleResolution": "node",
-		"outDir": "dist",
+		"outDir": "js",
+		"declarationDir": "dts",
 		"declaration": true,
 		"strict": true
 	},
@@ -13,6 +14,6 @@
 		"node_modules"
 	],
 	"include": [
-		"src"
+		"ts"
 	]
 }

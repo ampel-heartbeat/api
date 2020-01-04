@@ -1,5 +1,5 @@
 {
-	"name": "foij",
+	"name": "",
 	"version": "0.0.1",
 	"description": "",
 	"main": "dist/index",
@@ -9,7 +9,7 @@
 		"prepublishOnly": "npm run compile",
 		"compile": "npm run clean && /usr/local/bin/tsc -p tsconfig.json",
 		"watch": "tsc -w -p .",
-		"clean": "rm -rf dist"
+		"clean": "rm -rf js && rm -rf dts"
 	},
 	"repository": {
 		"type": "git",
@@ -30,7 +30,9 @@
 		"@elijahjcobb/maria": "latest",
 		"typit": "latest",
 		"@elijahjcobb/encryption": "latest",
-		"@elijahjcobb/sql-cmd": "latest"
+		"@elijahjcobb/sql-cmd": "latest",
+		"@command-socket/server": "latest",
+		"@command-socket/node-client": "latest"
 	},
 	"devDependencies": {
 		"@types/node": "^12.12.8",

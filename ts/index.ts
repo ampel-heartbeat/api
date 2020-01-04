@@ -23,8 +23,21 @@
  */
 
 import {ECMDatabase, ECMQuery} from "@elijahjcobb/maria";
+import {CommandSocketServer} from "@command-socket/server";
+import {CommandSocket} from "@command-socket/node-client";
 
 ECMDatabase.init({
 	database: "heartbeat"
 });
 
+const server: CommandSocketServer = new CommandSocketServer(3001);
+
+server.getEvents().CONNECTION_OPENED.subscribe((socket: CommandSocket) => {
+
+});
+
+server.getEvents().CONNECTION_CLOSED.subscribe((socket: void) => {
+
+});
+
+server.getCommandRegistry()
