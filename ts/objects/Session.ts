@@ -22,24 +22,20 @@
  *
  */
 
-import {ECMObject, ECMObjectPropType, ECMQuery} from "@elijahjcobb/maria";
-import {ECSError} from "@elijahjcobb/server";
+import {SiObject, SiQuery} from "@element-ts/silicon";
 import {User, UserProps} from "./User";
 import {Device, DeviceProps} from "./Device";
 
-export interface SessionProps extends ECMObjectPropType {
+export interface SessionProps {
 	userId: string;
 	deviceId: string;
 }
 
-export class Session extends ECMObject<SessionProps> {
+export class Session extends SiObject<SessionProps> {
 
 	public constructor() {
 
-		super("Session", {
-			userId: "string",
-			deviceId: "string"
-		});
+		super("session");
 
 	}
 
@@ -47,7 +43,7 @@ export class Session extends ECMObject<SessionProps> {
 
 		const userId: string | undefined = this.props.userId;
 		if (!userId) throw ECSError.init().show().code(400).msg("Referencing does not have a valid session id the session you are. Sign in again, you must.");
-		const user: User | undefined = await ECMQuery.getObjectWithId<User, UserProps>(User, userId, true);
+		const user: User | undefined = await SiQuery.getObjectForId<User, UserProps>(User, userId);
 		if (!user) throw ECSError.init().show().code(400).msg("The droids you are looking for these are not. Does not exist the user you are. Try again you must. Yrsssss.");
 
 		return user;
@@ -58,7 +54,7 @@ export class Session extends ECMObject<SessionProps> {
 
 		const deviceId: string | undefined = this.props.deviceId;
 		if (!deviceId) throw ECSError.init().show().code(400).msg("Referencing does not have a valid session id the session you are. Sign in again, you must.");
-		const device: Device | undefined = await ECMQuery.getObjectWithId<Device, DeviceProps>(Device, deviceId, true);
+		const device: Device | undefined = await SiQuery.getObjectForId<Device, DeviceProps>(Device, deviceId);
 		if (!device) throw ECSError.init().show().code(400).msg("The droids you are looking for these are not. Does not exist the device you are. Try again you must. Yrsssss.");
 
 		return device;

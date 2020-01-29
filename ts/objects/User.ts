@@ -22,14 +22,12 @@
  *
  */
 
-import {ECMObject, ECMObjectPropType, ECMQuery} from "@elijahjcobb/maria";
+import {SiObject, SiQuery} from "@element-ts/silicon";
 import { ECGenerator } from "@elijahjcobb/encryption";
 import {Session} from "./Session";
-import {ECSError} from "@elijahjcobb/server";
-import {ECSQLCMD} from "@elijahjcobb/sql-cmd";
 import {Device} from "./Device";
 
-export interface UserProps extends ECMObjectPropType {
+export interface UserProps {
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -37,27 +35,21 @@ export interface UserProps extends ECMObjectPropType {
 	pepper: Buffer;
 }
 
-export class User extends ECMObject<UserProps> {
+export class User extends SiObject<UserProps> {
 
 	public constructor() {
 
-		super("User", {
-			firstName: "string",
-			lastName: "string",
-			email: "string",
-			salt: "buffer",
-			pepper: "buffer"
-		});
+		super("user");
 
 	}
 
 	public async generateSession(deviceId?: string | undefined): Promise<Session> {
 
-		if (!this.id) throw ECSError.init().code(500).msg("New your account is. In order to start a session, be saved your account must. Worry not, an internal server error this is.");
+		if (!this.getId()) throw ECSError.init().code(500).msg("New your account is. In order to start a session, be saved your account must. Worry not, an internal server error this is.");
 
 		const session: Session = new Session();
 
-		session.props.userId = this.id;
+		session.props.userId = this.getId();
 		if (deviceId) session.props.deviceId = deviceId;
 
 		await session.create();
@@ -71,8 +63,8 @@ export class User extends ECMObject<UserProps> {
 		const device: Device = new Device();
 
 		device.props.name = name;
-		if (this.id == undefined) throw ECSError.init().code(500).msg("Hrrmmm. New your account is. In order to create a new device, be created your account must.");
-		device.props.userId = this.id;
+		if (this.getId() == undefined) throw ECSError.init().code(500).msg("Hrrmmm. New your account is. In order to create a new device, be created your account must.");
+		device.props.userId = this.getId();
 
 		await device.create();
 
@@ -98,11 +90,9 @@ export class User extends ECMObject<UserProps> {
 
 	public static async login(email: string, password: string): Promise<User> {
 
-		const query: ECMQuery<User, UserProps> = new ECMQuery<User, UserProps>(User, ECSQLCMD.select(new User().table)
-			.where("email", "=", email)
-		);
+		const query: SiQuery<User, UserProps> = new SiQuery<User, UserProps>(User, {email});
 
-		const user: User | undefined = await query.getFirstObject(true);
+		const user: User | undefined = await query.getFirst();
 		if (user === undefined) throw ECSError.init().code(404).msg("The droids you are looking for these are not. Use a correct email and password to sign in you must. Please try again. Yes, hrrrm.");
 		if (user.props.salt === undefined) throw ECSError.init().code(500).msg("Created incorrectly your account was, have a salt/pepper saved you do not.");
 		if (user.props.pepper === undefined) throw ECSError.init().code(500).msg("Created incorrectly your account was, have a salt/pepper saved you do not.");

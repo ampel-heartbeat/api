@@ -1,5 +1,5 @@
 {
-	"name": "",
+	"name": "ampel-heartbeart-api",
 	"version": "0.0.1",
 	"description": "",
 	"main": "dist/index",
@@ -26,13 +26,11 @@
 	},
 	"homepage": "https://github.com/elijahjcobb/***#readme",
 	"dependencies": {
-		"@elijahjcobb/server": "latest",
-		"@elijahjcobb/maria": "latest",
-		"typit": "latest",
-		"@elijahjcobb/encryption": "latest",
-		"@elijahjcobb/sql-cmd": "latest",
+		"@command-socket/node-client": "latest",
 		"@command-socket/server": "latest",
-		"@command-socket/node-client": "latest"
+		"@element-ts/silicon": "latest",
+		"@elijahjcobb/encryption": "latest",
+		"typit": "latest"
 	},
 	"devDependencies": {
 		"@types/node": "^12.12.8",

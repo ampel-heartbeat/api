@@ -22,9 +22,9 @@
  *
  */
 
-import { ECMObject, ECMObjectPropType } from "@elijahjcobb/maria";
+import {SiObject} from "@element-ts/silicon";
 
-export interface DeviceProps extends ECMObjectPropType {
+export interface DeviceProps {
 	name: string;
 	userId: string;
 	enforcedUrl: string;
@@ -40,25 +40,11 @@ export interface DeviceProps extends ECMObjectPropType {
 	timezone: string;
 }
 
-export class Device extends ECMObject<DeviceProps> {
+export class Device extends SiObject<DeviceProps> {
 
 	public constructor() {
 
-		super("Device", {
-			name: "string",
-			userId: "string",
-			enforcedUrl: "string",
-			uptime: "number",
-			battery: "number",
-			locationLat: "number",
-			locationLng: "number",
-			time: "number",
-			cpu: "number",
-			hdd: "number",
-			ram: "number",
-			temp: "number",
-			timezone: "string"
-		});
+		super("device");
 
 	}
 
