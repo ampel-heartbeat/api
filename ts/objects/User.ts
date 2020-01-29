@@ -23,7 +23,7 @@
  */
 
 import {SiObject, SiQuery} from "@element-ts/silicon";
-import { ECGenerator } from "@elijahjcobb/encryption";
+import {ECGenerator} from "@elijahjcobb/encryption";
 import {Session} from "./Session";
 import {Device} from "./Device";
 

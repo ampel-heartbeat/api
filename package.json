@@ -26,16 +26,15 @@
 	},
 	"homepage": "https://github.com/elijahjcobb/***#readme",
 	"dependencies": {
-		"@command-socket/node-client": "latest",
-		"@command-socket/server": "latest",
+		"@element-ts/hydrogen": "latest",
 		"@element-ts/silicon": "latest",
-		"@elijahjcobb/encryption": "latest",
-		"typit": "latest"
+		"@element-ts/palladium": "latest",
+		"@elijahjcobb/encryption": "latest"
 	},
 	"devDependencies": {
-		"@types/node": "^12.12.8",
-		"tslint": "^5.20.1",
-		"typescript": "^3.7.2"
+		"@types/node": "latest",
+		"tslint": "latest",
+		"typescript": "latest"
 	},
 	"files": [
 		"dist"

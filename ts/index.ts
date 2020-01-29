@@ -23,6 +23,7 @@
  */
 
 import {SiDatabase} from "@element-ts/silicon";
+import {} from "@element-ts/hydrogen";
 
 const main: () => Promise<void> = async(): Promise<void> => {
 
@@ -31,7 +32,7 @@ const main: () => Promise<void> = async(): Promise<void> => {
 		database: ""
 	});
 
-	// command socket stuff
+
 
 };
 
