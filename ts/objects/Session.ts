@@ -42,9 +42,9 @@ export class Session extends SiObject<SessionProps> {
 	public async getUser(): Promise<User> {
 
 		const userId: string | undefined = this.props.userId;
-		if (!userId) throw ECSError.init().show().code(400).msg("Referencing does not have a valid session id the session you are. Sign in again, you must.");
+		if (!userId) throw new Error("The userId referenced is undefined.");
 		const user: User | undefined = await SiQuery.getObjectForId<User, UserProps>(User, userId);
-		if (!user) throw ECSError.init().show().code(400).msg("The droids you are looking for these are not. Does not exist the user you are. Try again you must. Yrsssss.");
+		if (!user) throw new Error("The user referenced is undefined.");
 
 		return user;
 
@@ -53,9 +53,9 @@ export class Session extends SiObject<SessionProps> {
 	public async getDevice(): Promise<Device> {
 
 		const deviceId: string | undefined = this.props.deviceId;
-		if (!deviceId) throw ECSError.init().show().code(400).msg("Referencing does not have a valid session id the session you are. Sign in again, you must.");
+		if (!deviceId) throw new Error("The deviceId referenced is undefined.");
 		const device: Device | undefined = await SiQuery.getObjectForId<Device, DeviceProps>(Device, deviceId);
-		if (!device) throw ECSError.init().show().code(400).msg("The droids you are looking for these are not. Does not exist the device you are. Try again you must. Yrsssss.");
+		if (!device) throw new Error("The device references is undefined.");
 
 		return device;
 

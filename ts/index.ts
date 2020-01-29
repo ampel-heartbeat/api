@@ -22,22 +22,17 @@
  *
  */
 
-import {ECMDatabase, ECMQuery} from "@elijahjcobb/maria";
-import {CommandSocketServer} from "@command-socket/server";
-import {CommandSocket} from "@command-socket/node-client";
+import {SiDatabase} from "@element-ts/silicon";
 
-ECMDatabase.init({
-	database: "heartbeat"
-});
+const main: () => Promise<void> = async(): Promise<void> => {
 
-const server: CommandSocketServer = new CommandSocketServer(3001);
+	await SiDatabase.init({
+		address: "",
+		database: ""
+	});
 
-server.getEvents().CONNECTION_OPENED.subscribe((socket: CommandSocket) => {
+	// command socket stuff
 
-});
+};
 
-server.getEvents().CONNECTION_CLOSED.subscribe((socket: void) => {
-
-});
-
-server.getCommandRegistry()
+main().then(() => {}).catch((err: any) => console.error(err));

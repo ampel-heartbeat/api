@@ -45,7 +45,7 @@ export class User extends SiObject<UserProps> {
 
 	public async generateSession(deviceId?: string | undefined): Promise<Session> {
 
-		if (!this.getId()) throw ECSError.init().code(500).msg("New your account is. In order to start a session, be saved your account must. Worry not, an internal server error this is.");
+		if (!this.getId()) throw new Error("You must be a registered user to start a session.");
 
 		const session: Session = new Session();
 
@@ -63,7 +63,7 @@ export class User extends SiObject<UserProps> {
 		const device: Device = new Device();
 
 		device.props.name = name;
-		if (this.getId() == undefined) throw ECSError.init().code(500).msg("Hrrmmm. New your account is. In order to create a new device, be created your account must.");
+		if (this.getId() == undefined) throw new Error("You must be a registered user to create a device.");
 		device.props.userId = this.getId();
 
 		await device.create();
@@ -93,11 +93,12 @@ export class User extends SiObject<UserProps> {
 		const query: SiQuery<User, UserProps> = new SiQuery<User, UserProps>(User, {email});
 
 		const user: User | undefined = await query.getFirst();
-		if (user === undefined) throw ECSError.init().code(404).msg("The droids you are looking for these are not. Use a correct email and password to sign in you must. Please try again. Yes, hrrrm.");
-		if (user.props.salt === undefined) throw ECSError.init().code(500).msg("Created incorrectly your account was, have a salt/pepper saved you do not.");
-		if (user.props.pepper === undefined) throw ECSError.init().code(500).msg("Created incorrectly your account was, have a salt/pepper saved you do not.");
+		const emailPasswordErrorMessage: string = "Your email or password is incorrect.";
+		if (user === undefined) throw new Error(emailPasswordErrorMessage);
+		if (user.props.salt === undefined) throw new Error("Your salt is undefined.");
+		if (user.props.pepper === undefined) throw new Error("Your password is undefined.");
 		const providedPepper: Buffer = this.generatePepper(user.props.salt, password);
-		if (!providedPepper.equals(user.props.pepper)) throw ECSError.init().code(404).msg("The droids you are looking for these are not. Use a correct email and password to sign in you must. Please try again. Yes, hrrrm.");
+		if (!providedPepper.equals(user.props.pepper)) throw new Error(emailPasswordErrorMessage);
 
 		return user;
 
