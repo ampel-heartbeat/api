@@ -22,18 +22,59 @@
  *
  */
 
-import {SiDatabase} from "@element-ts/silicon";
-import {} from "@element-ts/hydrogen";
+import {HHTTPServer, HEndpointGroup, HRequest, HResponse} from "@element-ts/hydrogen";
+import {StandardType} from "typit";
+import {PdResponse, PdMethod, PdRequest} from "@element-ts/palladium";
+import * as Mailgun from "mailgun-js";
+import Timeout = NodeJS.Timeout;
+const urlEndpointGroup: HEndpointGroup = new HEndpointGroup();
 
-const main: () => Promise<void> = async(): Promise<void> => {
+let url: string = "https://ampelfeedback.xyz";
+let timeout: Timeout | undefined = undefined;
 
-	await SiDatabase.init({
-		address: "",
-		database: ""
+const mailgun: Mailgun.Mailgun = Mailgun({apiKey: "key-965a00eb1895c469520ff6b64fdfd65e", domain: "mail.ampelfeedback.xyz"});
+
+const timeoutHandler: () => Promise<void> = async(): Promise<void> => {
+
+	if (timeout) clearTimeout(timeout);
+	timeout = undefined;
+
+	await mailgun.messages().send({
+		from: "heartbeat@mail.ampelfeedback.xyz",
+		to: [
+			"elijah@ampelfeedback.com",
+			"trevor@ampelfeedback.com",
+			"sebastian@ampelfeedback.com"
+		],
+		subject: "Ampel Heartbeat Notification",
+		text: "Hello Sebastian,\n\nFormative Fitness's Ampel Kiosk is down. Please check into it.\n\n - The Ampel Team"
 	});
-
-
 
 };
 
-main().then(() => {}).catch((err: any) => console.error(err));
+urlEndpointGroup.post("/", {
+	handler: async(req: HRequest, res: HResponse): Promise<void> => {
+
+		const body: {url: string} = req.getBody();
+		url = body.url;
+		res.send({url});
+
+	},
+	types: {
+		url: StandardType.STRING
+	}
+});
+
+urlEndpointGroup.get("/", async(req: HRequest, res: HResponse): Promise<void> => {
+
+	if (timeout) clearTimeout(timeout);
+	timeout = setTimeout(timeoutHandler, 30_000);
+
+	res.send({url});
+
+});
+
+const rootEndpointGroup: HEndpointGroup = new HEndpointGroup();
+rootEndpointGroup.attach("/url", urlEndpointGroup);
+
+new HHTTPServer(rootEndpointGroup).start(3000);

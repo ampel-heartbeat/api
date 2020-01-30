@@ -29,12 +29,14 @@
 		"@element-ts/hydrogen": "latest",
 		"@element-ts/silicon": "latest",
 		"@element-ts/palladium": "latest",
-		"@elijahjcobb/encryption": "latest"
+		"@elijahjcobb/encryption": "latest",
+		"mailgun-js": "latest"
 	},
 	"devDependencies": {
 		"@types/node": "latest",
 		"tslint": "latest",
-		"typescript": "latest"
+		"typescript": "latest",
+		"@types/mailgun-js": "latest"
 	},
 	"files": [
 		"dist"
