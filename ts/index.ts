@@ -67,7 +67,7 @@ urlEndpointGroup.post("/", {
 urlEndpointGroup.get("/", async(req: HRequest, res: HResponse): Promise<void> => {
 
 	if (timeout) clearTimeout(timeout);
-	timeout = setTimeout(timeoutHandler, 3_000);
+	timeout = setTimeout(timeoutHandler, 30_000);
 
 	res.send({url});
 
