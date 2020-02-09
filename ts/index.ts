@@ -24,7 +24,6 @@
 
 import {HHTTPServer, HEndpointGroup, HRequest, HResponse} from "@element-ts/hydrogen";
 import {StandardType} from "typit";
-import {PdResponse, PdMethod, PdRequest} from "@element-ts/palladium";
 import * as Mailgun from "mailgun-js";
 import Timeout = NodeJS.Timeout;
 const urlEndpointGroup: HEndpointGroup = new HEndpointGroup();
@@ -68,7 +67,7 @@ urlEndpointGroup.post("/", {
 urlEndpointGroup.get("/", async(req: HRequest, res: HResponse): Promise<void> => {
 
 	if (timeout) clearTimeout(timeout);
-	timeout = setTimeout(timeoutHandler, 30_000);
+	timeout = setTimeout(timeoutHandler, 3_000);
 
 	res.send({url});
 
